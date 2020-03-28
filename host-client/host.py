@@ -26,6 +26,7 @@ def link_builder(room_link):
 # reference: https://crossbrowsertesting.com/blog/test-automation/automate-login-with-selenium/
 # reference: https://stackoverflow.com/questions/19035186/how-to-select-element-using-xpath-syntax-on-selenium-for-python
 def login(driver, room_link):
+	print("\tLogging in...\n")
 	web_link = link_builder(room_link) # convert to web client link
 	try: # try opening the given link, logging in
 		driver.get(web_link) # open zoom meeting login page
@@ -45,6 +46,22 @@ def login(driver, room_link):
 		print("\tError: Login Failed. Verify that you're connecting to the right room.\n")
 		sys.exit()
 
+# open_participants() - opens the participants menu, loads all members
+def open_participants(driver):
+	print("\tOpening participants list...\n")
+	try: # try to click it right away
+		driver.find_element_by_class_name("footer-button__participants-icon").click()
+	except: # if it isn't clickable (sometimes takes a sec to load properly)
+		print("\tFailed. Trying again, please wait...\n")
+		time.sleep(5)
+		driver.find_element_by_class_name("footer-button__participants-icon").click()
+	print("\tOpened participants list.\n")
+	return
+
+# count_reaction() - counts the number of a chosen reaction at a given time
+def count_reaction(driver, reaction_name):
+	return
+
 def main(argv):
 	print("\n\t--- Zoom Education Suite | Host Client ---")
 	# testing
@@ -59,6 +76,8 @@ def main(argv):
 	driver = webdriver.Chrome(options=options)
 	# run program
 	login(driver, argv[1])
+	open_participants(driver)
+	time.sleep(10)
 
 if __name__ == '__main__':
 	main(sys.argv)
