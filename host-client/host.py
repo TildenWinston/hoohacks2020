@@ -84,9 +84,6 @@ def main(argv):
 	# run program
 	login(driver, argv[1])
 	open_participants(driver)
-	thisdict =	{"hands_raised": "participants-icon__participants-raisehand",
-	"thumbs_up": "Mustang",
-	"year": 1964}
 	count_reaction(driver)
 	time.sleep(10)
 
