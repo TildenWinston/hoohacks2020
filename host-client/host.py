@@ -11,6 +11,15 @@ import re
 import urllib.request as urlr
 import time
 
+# start_driver() - starts the webdriver and returns it
+def start_driver(headless = True):
+	# setup webdriver settings
+	options = webdriver.ChromeOptions() # hiding startup info that pollutes terminal
+	options.headless = headless # headless or not, passed as arg
+	options.add_experimental_option('excludeSwitches', ['enable-logging'])
+	# start webdriver
+	return webdriver.Chrome(options=options)
+
 # prompt() - prompts the host to enter the room link
 def prompt():
 	# should probably be a tkinter window, don't know how packaging works with cmd line
@@ -60,25 +69,24 @@ def open_participants(driver):
 
 # count_reaction() - counts the number of a chosen reaction at a given time
 def count_reaction(driver, reaction_name = "participants-icon__participants-raisehand"):
-	hands_raised = driver.find_elements_by_class_name(reaction_name)
-	print("number of hands raised: ", len(hands_raised))
+	react_list = driver.find_elements_by_class_name(reaction_name)
+	print("\tNumber of", reaction_name, ": " , len(react_list), "\n")
 	return
 
 def main(argv):
-	print("\n\t--- Zoom Education Suite | Host Client ---")
+	print("\n\t--- Zoom Education Suite | Host Client ---\n")
 	# testing
 	# link_builder() testing
 	# print("original link: ", argv[1])
 	# print("\n new link: ", link_builder(argv[1]))
-	# setup web driver settings
-	# start webdriver
-	options = webdriver.ChromeOptions() # hiding startup info that pollutes terminal
-	options.headless = False
-	options.add_experimental_option('excludeSwitches', ['enable-logging'])
-	driver = webdriver.Chrome(options=options)
+	# start the webdriver (not in headless mode)
+	driver = start_driver(True)
 	# run program
 	login(driver, argv[1])
 	open_participants(driver)
+	thisdict =	{"hands_raised": "participants-icon__participants-raisehand",
+	"thumbs_up": "Mustang",
+	"year": 1964}
 	count_reaction(driver)
 	time.sleep(10)
 
