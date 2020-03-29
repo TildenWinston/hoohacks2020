@@ -14,6 +14,7 @@ import random
 
 # launch() - launch sequence to get driver started, logged in, and prepared to work
 def launch(room_link, headless = True):
+	print("\n\t--- Zoom Education Suite | Host Client ---\n")
 	driver = start_driver(headless) # start the driver and store it (will be returned)
 	login(driver, room_link) # log into the room with the room link
 	open_participants(driver) # open participants panel so data can be collected

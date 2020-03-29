@@ -145,7 +145,7 @@ def main():
     # get selenium data collector going
     # set launch options
     room_link = "https://virginia.zoom.us/j/312504706"
-    headless = False
+    headless = True
     # declare webdriver to store chrome driver
     global webdriver
     # launch and store it (with the selected options)
