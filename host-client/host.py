@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
-from bs4 import BeautifulSoup as bs
+# from bs4 import BeautifulSoup as bs
 import sys
 import re
 import urllib.request as urlr
@@ -59,7 +59,9 @@ def open_participants(driver):
 	return
 
 # count_reaction() - counts the number of a chosen reaction at a given time
-def count_reaction(driver, reaction_name):
+def count_reaction(driver, reaction_name = "participants-icon__participants-raisehand"):
+	hands_raised = driver.find_elements_by_class_name(reaction_name)
+	print("number of hands raised: ", len(hands_raised))
 	return
 
 def main(argv):
@@ -77,6 +79,7 @@ def main(argv):
 	# run program
 	login(driver, argv[1])
 	open_participants(driver)
+	count_reaction(driver)
 	time.sleep(10)
 
 if __name__ == '__main__':
