@@ -62,10 +62,10 @@ def login(driver, room_link):
 		print("\tError: Login Failed. Verify that you're connecting to the right room.\n")
 		sys.exit()
 
-# open_participants() - opens the participants menu, loads all members
-# refactor: combine this with open_chat() to make general menu opener
-def open_participants(driver):
-	print("\tOpening participants list...\n")
+# click_participants() - click on the participants button
+# originally always left open, made this to allow for closing to avoid interference
+# refactor: combine this with click_chat() to make general menu opener
+def click_participants(driver):
 	time.sleep(2)
 	try: # try to click it right away
 		# find it using the participants icon
@@ -74,7 +74,20 @@ def open_participants(driver):
 		print("\tFailed. Trying again, please wait...\n")
 		time.sleep(7)
 		driver.find_element_by_class_name("footer-button__participants-icon").click()
+	return
+
+# open_participants() - opens the participants menu, loads all members
+def open_participants(driver):
+	print("\tOpening participants list...\n")
+	click_participants(driver)
 	print("\tOpened participants list.\n")
+	return
+
+# close_participants() - opens the participants menu, loads all members
+def close_participants(driver):
+	print("\tClosing participants list...\n")
+	click_participants(driver)
+	print("\tClosed participants list.\n")
 	return
 
 # count_reaction() - counts the number of a chosen reaction at a given time
@@ -164,11 +177,45 @@ def close_chat(driver):
 	print("\tClosed chat menu.\n")
 	return
 
+# choose_recipient() - selects the chosen recipient from the dropdown
+def choose_recipient(driver, recipient_name):
+	print("\tFinding target recipient.\n")
+	# open the dropdown menu
+	try: # try to find it right away
+		# find the dropdown menu
+		dropdown = driver.find_element_by_class_name(
+			# "chat-receiver-list__chat-control-receiver ax-outline-blue-important dropdown-toggle btn btn-default")
+			"chat-receiver-list__chat-control-receiver")
+	except: # if it isn't clickable (sometimes takes a sec to load properly)
+		print("\tFailed. Trying again, please wait...\n")
+		time.sleep(7)
+		dropdown = driver.find_element_by_class_name(
+			# "chat-receiver-list__chat-control-receiver ax-outline-blue-important dropdown-toggle btn btn-default")
+			"chat-receiver-list__chat-control-receiver")
+	dropdown.click() # click the dropdown menu
+	time.sleep(2) # lazy way to wait for it to load
+	# now find and click on the actual recipient
+	# first, focus on the actual dropdown menu of potential recipients
+	dropdown = driver.find_element_by_class_name("chat-receiver-list__scrollbar-height")
+	# find the element with our recipient's name
+	# dropdown.find_element_by_xpath('//dd[@data-value="' + recipient_name + '"])').click()
+	# build our string for xpath (probably a better way, but oh well)
+	xpath_string = "//a[contains(text(), '" + recipient_name + "')]"
+	print("testing name:\n", xpath_string)
+	dropdown_element = dropdown.find_element_by_xpath(xpath_string)
+	# now go up a level to the clickable parent
+	dropdown_element = dropdown_element.find_element_by_xpath("./..")
+	# now actually click the element so we can send 'em a message
+	dropdown_element.click()
+	# time.sleep(1) # just to be sure (testing)
+	return
+
 # send_message() - have the bot send someone (by default the host) a message
 # random string of numbers for default host string accounts for "funny" students
 # who might name themselves "host." This string is never visible, so they'd have to guess
 # reference: https://stackoverflow.com/questions/12323403/how-do-i-find-an-element-that-contains-specific-text-in-selenium-webdriver-pyth
 def send_message(driver, recipient = "host_69974030947301", message = "I'm a bot, and I'm being tested! Yay!"):
+	open_chat(driver) # open the chat menu, to enable sending a message
 	recipient_name = "" # temporary storage for recipient name
 	# participants-item__name-label
 	if (recipient == "host_69974030947301"): # if the recipient is default
@@ -176,7 +223,9 @@ def send_message(driver, recipient = "host_69974030947301", message = "I'm a bot
 		recipient_name = identify_host(driver) # set host's name to recipient name
 	else:
 		recipient_name = recipient # set recipient_name to input name
+	choose_recipient(driver, recipient_name)
 	print("\tSending message to:", recipient_name, "\n")
+	close_chat(driver) # close the chat menu, since you're done sending a message
 	return recipient_name
 
 # take_attendance() - take attendance of who is there at current time
@@ -229,10 +278,9 @@ def main(argv):
 	take_attendance(driver)
 	who_participates(driver)
 	call_on(driver)
+	# open_chat(driver) # must open chat before sending message
 	send_message(driver)
-	identify_host(driver)
-	open_chat(driver)
-	close_chat(driver)
+	# close_chat(driver)
 	time.sleep(2)
 	# leave_meeting() is broken, but non-essential
 	# leave_meeting(driver)
