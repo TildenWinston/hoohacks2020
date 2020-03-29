@@ -58,11 +58,12 @@ def login(driver, room_link):
 # open_participants() - opens the participants menu, loads all members
 def open_participants(driver):
 	print("\tOpening participants list...\n")
+	time.sleep(2)
 	try: # try to click it right away
 		driver.find_element_by_class_name("footer-button__participants-icon").click()
 	except: # if it isn't clickable (sometimes takes a sec to load properly)
 		print("\tFailed. Trying again, please wait...\n")
-		time.sleep(5)
+		time.sleep(7)
 		driver.find_element_by_class_name("footer-button__participants-icon").click()
 	print("\tOpened participants list.\n")
 	return
@@ -70,8 +71,22 @@ def open_participants(driver):
 # count_reaction() - counts the number of a chosen reaction at a given time
 def count_reaction(driver, reaction_name = "participants-icon__participants-raisehand"):
 	react_list = driver.find_elements_by_class_name(reaction_name)
-	print("\tNumber of", reaction_name, ": " , len(react_list), "\n")
-	return
+	print("\tNumber of hands raised: " , len(react_list), "\n") # print total
+	return len(react_list) # return number of reactions
+
+# take_attendance() - take attendance of who is there at current time
+# I'd have avoided the second list creation, but attendee list was polluted by bot names
+# could add filtering out prof later, but requires searching addditional elements
+def take_attendance(driver):
+	# collect all attendees into list by looking for spans with the following class
+	attendee_list = driver.find_elements_by_class_name("participants-item__display-name")
+	new_attendee_list = [] # for storing refined list (filters out self)
+	for i in range(len(attendee_list)): # for each webElement in list of attendees
+		if (attendee_list[i].get_attribute("innerHTML") != "zoom edu bot"): # if not bot
+			# then refine to name and add to the new list
+			new_attendee_list.append(attendee_list[i].get_attribute("innerHTML"))
+	print("\tStudents: ", new_attendee_list)
+	return new_attendee_list # return attendee list
 
 def main(argv):
 	print("\n\t--- Zoom Education Suite | Host Client ---\n")
@@ -85,7 +100,9 @@ def main(argv):
 	login(driver, argv[1])
 	open_participants(driver)
 	count_reaction(driver)
+	take_attendance(driver)
 	time.sleep(10)
+	print("\n\tFinished.\n")
 
 if __name__ == '__main__':
 	main(sys.argv)
