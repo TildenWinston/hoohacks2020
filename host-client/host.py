@@ -13,11 +13,15 @@ import time
 import random
 
 # start_driver() - starts the webdriver and returns it
+# reference: https://browsersize.com/
+# reference: https://stackoverflow.com/questions/23381324/how-can-i-control-chromedriver-open-window-size
 def start_driver(headless = True):
 	# setup webdriver settings
 	options = webdriver.ChromeOptions() # hiding startup info that pollutes terminal
 	options.headless = headless # headless or not, passed as arg
 	options.add_experimental_option('excludeSwitches', ['enable-logging'])
+	# make window size bigger to see all buttons
+	options.add_argument("--window-size=1600,1200")
 	# start webdriver
 	return webdriver.Chrome(options=options)
 
@@ -59,10 +63,12 @@ def login(driver, room_link):
 		sys.exit()
 
 # open_participants() - opens the participants menu, loads all members
+# refactor: combine this with open_chat() to make general menu opener
 def open_participants(driver):
 	print("\tOpening participants list...\n")
 	time.sleep(2)
 	try: # try to click it right away
+		# find it using the participants icon
 		driver.find_element_by_class_name("footer-button__participants-icon").click()
 	except: # if it isn't clickable (sometimes takes a sec to load properly)
 		print("\tFailed. Trying again, please wait...\n")
@@ -129,6 +135,35 @@ def identify_host(driver):
 	print("\tThe name of the host is:", recipient_name, "\n")
 	return recipient_name
 
+# click_chat(driver) - opens or closes chat window
+# refactor: combine this with open_participants to make general menu opener
+def click_chat(driver):
+	time.sleep(2)
+	# had to handle making window size bigger because participants list cut off button
+	# see driver_start() for solution
+	try: # try to click it right away
+		# find it using the chat icon
+		driver.find_element_by_class_name("footer-button__chat-icon").click()
+	except: # if it isn't clickable (sometimes takes a sec to load properly)
+		print("\tFailed. Trying again, please wait...\n")
+		time.sleep(7)
+		driver.find_element_by_class_name("footer-button__chat-icon").click()
+	return # successfully clicked (hopefully)
+
+# open_chat() -  opens chat popup
+def open_chat(driver):
+	print("\tOpening chat menu...\n")
+	click_chat(driver) # click on the chat button
+	print("\tOpened chat menu.\n")
+	return
+
+# close_chat() - closes chat popup
+def close_chat(driver):
+	print("\tClosing chat menu...\n")
+	click_chat(driver) # click on the chat button
+	print("\tClosed chat menu.\n")
+	return
+
 # send_message() - have the bot send someone (by default the host) a message
 # random string of numbers for default host string accounts for "funny" students
 # who might name themselves "host." This string is never visible, so they'd have to guess
@@ -137,14 +172,8 @@ def send_message(driver, recipient = "host_69974030947301", message = "I'm a bot
 	recipient_name = "" # temporary storage for recipient name
 	# participants-item__name-label
 	if (recipient == "host_69974030947301"): # if the recipient is default
-		target =  driver.find_element_by_xpath(
-			"//*[contains(text(), '(Host)')]") # find the host's webElement
-			# "//*[text()='(Host)']") # find the host's webElement
-		target = target.find_element_by_xpath("./..") # go to parent element
-		# get other child element of parent; contains host's name
-		target = target.find_element_by_class_name("participants-item__display-name")
-		# get innerHTML of actual host's name
-		recipient_name = target.get_attribute("innerHTML")
+		# call identify_host() to get host's name
+		recipient_name = identify_host(driver) # set host's name to recipient name
 	else:
 		recipient_name = recipient # set recipient_name to input name
 	print("\tSending message to:", recipient_name, "\n")
@@ -170,7 +199,7 @@ def main(argv):
 	# link_builder() testing
 	# print("original link: ", argv[1])
 	# print("\n new link: ", link_builder(argv[1]))
-	# start the webdriver (not in headless mode)
+	# start the webdriver (True = headless mode)
 	driver = start_driver(True)
 	# run program
 	login(driver, argv[1])
@@ -181,6 +210,8 @@ def main(argv):
 	call_on(driver)
 	send_message(driver)
 	identify_host(driver)
+	open_chat(driver)
+	close_chat(driver)
 	time.sleep(5)
 	print("\tFinished.\n")
 
