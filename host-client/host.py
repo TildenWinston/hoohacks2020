@@ -112,41 +112,21 @@ def call_on(driver):
 
 # identify_host() - identifies the name of the host
 def identify_host(driver):
-	# get list of potential targets by collecting list of labels (accounts for jerks who
-	# named themself "(Host)" to screw with the program)
-	# target_list = driver.find_elements_by_class_name("participants-item__name-label")
-	target_list = driver.find_elements_by_xpath("//*[contains(text(), '(Host)')]")
-	# need to loop (reference: https://stackoverflow.com/questions/32488544/selenium-java-how-to-find-an-element-from-a-list-of-possible-elements)
-	target = None # create variable for later
-	for i in range(len(target_list)): # in the list of potential hosts
-		# testing!
-		print("curr target: ", target_list[i])
-		target = target_list[i].find_element_by_xpath("./..") # go to parent element
-		# get other child element of parent; contains host's name
-		target = target.find_element_by_class_name("participants-item__display-name")
-		# get innerHTML of actual host's name
-		recipient_name = target.get_attribute("innerHTML")
-		print("curr name: ", recipient_name)
-		# testing! ^
-		try: # see if this one is the host
-			print("host? -> ", target_list[i].find_element_by_xpath(
-				"//*[contains(text(), '(Host)')]")) # see what happens when we don't find it
-			target =  target_list[i].find_element_by_xpath(
-				"//*[contains(text(), '(Host)')]") # find the host's webElement
-		except:
-			print("\tNah, this throws an exception\n")
-	# # creates target variable to hold element that is current subject of focus
-	# target = target_list.find_element_by_xpath(
-	# 	"//*[contains(text(), '(Host)')]") # find the host's webElement
-	# 	# "//*[text()='(Host)']") # find the host's webElement
-	if (target.get_attribute("class") != "participants-item__name-label"): # REMOVE once accomodated for
-		print("\tSome jerk named themself host to screw with this program.\n") # REMOVE once accomodated for
+	# creates target variable to hold element that is current subject of focus
+	target = driver.find_element_by_xpath(
+		"//*[contains(text(), '(Host)')]") # find the host's webElement
+		# "//*[text()='(Host)']") # find the host's webElement
+	# tried to accomodate for fake hosts, but had issues--not worth time in hackathon
+	if (target.get_attribute("class") != "participants-item__name-label"):
+		print("\tSome jerk named themself host to screw with this program.",
+			"Make them change their name.\n")
+		raise ValueError("Too complicated to handle fake hosts during hackathon.\n")
 	target = target.find_element_by_xpath("./..") # go to parent element
 	# get other child element of parent; contains host's name
 	target = target.find_element_by_class_name("participants-item__display-name")
 	# get innerHTML of actual host's name
 	recipient_name = target.get_attribute("innerHTML")
-	print("\tXX The name of the host is:", recipient_name, "\n")
+	print("\tThe name of the host is:", recipient_name, "\n")
 	return recipient_name
 
 # send_message() - have the bot send someone (by default the host) a message
