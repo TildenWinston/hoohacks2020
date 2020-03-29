@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "zoom-video-intelligence",
+  "private_key_id": "0977ba83d19c44c5f0ab727e889c86db232e6511",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDoUKZ1sbk8itSf\nbNNHwYqvu6gzFmcLlmVIPFH4wIpPhVTmECqBN5hZR2OCSBMMgsnjFCdb7o2zR1ev\nCCBerjwW8BJZvKjHMflN4WV8rdjWrxel4uX0fji5oB+M2DJJNTVEdlBwwQMIe4Rh\noJZoVFi2ohx+2gPuz0GjZ+A/oWUyjIFkC/HzcN7+ngTk0ViuRBhUk8pBwMb9EoKe\nBILJLlV/xV7/5UzL6FUOt7yFwpUKYYqKYYMujWDvH4SQJOrc+I5/S25n3QAZWbcb\nIkGmEovz9kzqHv9+3E1ImcvQMO4Pjn82Cj03dmu0BQF3f9AVZhgxvY9n/cFI/O1f\nVT/hiDKZAgMBAAECggEAG7cHbNITibv8Srq2aACYdYebNOEO0QyTr672jokV1w/O\nhZXXJExIIhqIrhHAKAVwZWVRnr+SaxlvRgPfrLv3kjr4zXja38y/88EYlOu+izof\nRZyQl375cHfAW9KtCRvOa4j75r+4B2qI7Aa2+uJZJQyo/p8uye4y4/YwBBdSldmA\nHSKeEbUjjXHvuihHOGvloMkIo0wZMe1uDOfsbcY3/oVFDDoybhyAIu+LVQ9nGIVn\nQL6ZmLFxCZmoc5wU9vZKu+fdDatmzcI0fiXamm+A0vNntzXRFSiwfyfVlGy7zUJ/\nsTYCIEbxYvLHbbYCNhpyW5ZHd31kAzX5FUnGMrfnGwKBgQD7dzgHhg/sWUHLjL71\nP2b7Jh7gmZulpc5vBpFJAZ3hq0jqqwE02U3xrcU6MP3noyiipuqUpv0UtclHJR6y\n7YwzVZ9fos+iLN/ORyi6iru8VrrjLtsOSqqH+mYWcyvbOaAt2OOrljJQuhtpI311\nn6pU5YCWnmeTKOg+hADut/jVkwKBgQDsgQffN/OxWpvSRDaOkLMacQSCTz2OgTSX\nAqrceOk+BpL2gDwJI0cQ3ml4s4jmcZoPrsDezao0x1pD/Zi5VWR5m28XgtCdB8Rf\n97wkn4juipPYlCL6GChaIHc7nfBKcxpoW937uUwKR+q6i3YV5Iez+Rl+QUAEbIks\nJ7Ts3wiyowKBgQCatzUv29n8LsZ+eDAdME8qAsBIq/nJpwQl50KISohbCkmoqGHr\npC+CnMmWDgKJ/CbKPCxkHYHkthwKu9nxeJokE3AlJUTeoQFqJvn2G9l5/Vqq4G9C\nkcnuM6+P7Hh1PzVAQAuDzLtUU8z9mSpdrkjcRwAgq4FKV4bcv9bbCTH+JQKBgEtc\nVjjPqGxkFfDrYYMOIrQTPT+UpmXJUAuqgu1b7d6g06WOeRLkVdnPNUaL1tyvaEsF\nAVo9qLXGrEGsBkVQK4MAf2a7fWP8PJvj4eS9nTF9oNzLX1XX6svFOpkZm57tjIWi\neFqk0dEY13f3xnn1ZzR29KOhgRenyhHy2Rj9fNUHAoGBAJnCUBvQruuqWJESuYVX\n4XNk9lj1x4SZy5inj2k+UleX4UxbExpGWlEUG52pUAKGTjI2qPHlaWviEg49K4y+\nMxJXviySDQOOPlynby3uyH5M399cYhAxRl83/nd1xfZ67p4ypPjz4+xZvxot28Z1\nmy3mR3nPrSLcLe9trwf1GrFc\n-----END PRIVATE KEY-----\n",
+  "client_email": "zoom-education-suite@zoom-video-intelligence.iam.gserviceaccount.com",
+  "client_id": "105009909930097564412",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/zoom-education-suite%40zoom-video-intelligence.iam.gserviceaccount.com"
+}
