@@ -1,11 +1,9 @@
 import os
 from google.cloud import videointelligence
-# from google.cloud import vision
-# from vision import types
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS']=r'google-suite-token.json'
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=r'zoom-token_2.json'
 
-def zoom_analysis(video, frame_to_use):
+def zoom_analysis(video, frame_to_use=0):
     video_client = videointelligence.VideoIntelligenceServiceClient()
     features = [videointelligence.enums.Feature.LABEL_DETECTION]
 
@@ -27,7 +25,7 @@ def zoom_analysis(video, frame_to_use):
                 print('\tLabel category description: {}'.format(
                     category_entity.description))
                 print(segment_label)
-                frame = segment_label[frame_to_use]
+                frame = segment_label.frames[frame_to_use]
                 time_offset = (frame.time_offset.seconds + 
                                 frame.time_offset.nanos / 1e9)
                 print('\tFirst frame time offset: {}s'.format(time_offset))
@@ -36,5 +34,5 @@ def zoom_analysis(video, frame_to_use):
                 frame_offsets.append(time_offset)
     return sorted(set(frame_offsets))
 
-frames = zoom_analysis('gs://zoom-education-suite-videos/emotions-test.mp4', 0)
+frames = zoom_analysis('gs://zoom-suite/facial-expressions.mp4')
 print(frames)
