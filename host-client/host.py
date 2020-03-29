@@ -193,6 +193,27 @@ def take_attendance(driver):
 	print("\tStudents: ", new_attendee_list, "\n") # print list of attendee names
 	return new_attendee_list # return attendee list
 
+# leave_meeting() - leaves the meeting
+# primarily to save sanity during testing--there are currently so many old bots logged in
+# broken: clicks getting intercepted(??) for some reason, non-essential feature
+def leave_meeting(driver):
+	print("\tLeaving meeting...\n")
+	driver.find_element_by_class_name("footer__leave-btn").click()
+	time.sleep(2) # wait a sec, doesn't need to be great
+	# hit tab twice to go to button, could be done better
+	# go away, it's just a sanity saver
+	# actions = ActionChains(driver)
+	# actions.send_keys(Keys.TAB).perform() # press tab key
+	# time.sleep(1)
+	# actions.send_keys(Keys.TAB).perform() # press tab key again
+	# time.sleep(1)
+	# actions.send_keys(Keys.TAB).perform() # press tab key again
+	# time.sleep(1)
+	# actions.send_keys(Keys.ENTER).perform() # press enter key
+	# target = driver.find_element_by_xpath("//*[contains(text(), 'Leave Meeting')]")
+	print("\tSuccessfully left the meeting. See you next time!\n")
+	return
+
 def main(argv):
 	print("\n\t--- Zoom Education Suite | Host Client ---\n")
 	# testing
@@ -200,7 +221,7 @@ def main(argv):
 	# print("original link: ", argv[1])
 	# print("\n new link: ", link_builder(argv[1]))
 	# start the webdriver (True = headless mode)
-	driver = start_driver(True)
+	driver = start_driver(False)
 	# run program
 	login(driver, argv[1])
 	open_participants(driver)
@@ -212,7 +233,10 @@ def main(argv):
 	identify_host(driver)
 	open_chat(driver)
 	close_chat(driver)
-	time.sleep(5)
+	time.sleep(2)
+	# leave_meeting() is broken, but non-essential
+	# leave_meeting(driver)
+	time.sleep(10)
 	print("\tFinished.\n")
 
 if __name__ == '__main__':
