@@ -201,7 +201,7 @@ def choose_recipient(driver, recipient_name):
 	# dropdown.find_element_by_xpath('//dd[@data-value="' + recipient_name + '"])').click()
 	# build our string for xpath (probably a better way, but oh well)
 	xpath_string = "//a[contains(text(), '" + recipient_name + "')]"
-	print("testing name:\n", xpath_string)
+	# print("testing name:\n", xpath_string)
 	dropdown_element = dropdown.find_element_by_xpath(xpath_string)
 	# now go up a level to the clickable parent
 	dropdown_element = dropdown_element.find_element_by_xpath("./..")
@@ -210,11 +210,21 @@ def choose_recipient(driver, recipient_name):
 	# time.sleep(1) # just to be sure (testing)
 	return
 
+# type_message() - types out message in chatbox and sends it
+def type_message(driver, message):
+	# grab chatbox by its class name
+	chatbox = driver.find_element_by_class_name("chat-box__chat-textarea")
+	# type out the given message in the chatbox
+	chatbox.send_keys(message)
+	# hit enter in the chatbox to send the message
+	chatbox.send_keys(u'\ue007')
+	return
+
 # send_message() - have the bot send someone (by default the host) a message
 # random string of numbers for default host string accounts for "funny" students
 # who might name themselves "host." This string is never visible, so they'd have to guess
 # reference: https://stackoverflow.com/questions/12323403/how-do-i-find-an-element-that-contains-specific-text-in-selenium-webdriver-pyth
-def send_message(driver, recipient = "host_69974030947301", message = "I'm a bot, and I'm being tested! Yay!"):
+def send_message(driver, recipient = "host_69974030947301", message = "I'm a bot!"):
 	open_chat(driver) # open the chat menu, to enable sending a message
 	recipient_name = "" # temporary storage for recipient name
 	# participants-item__name-label
@@ -224,6 +234,7 @@ def send_message(driver, recipient = "host_69974030947301", message = "I'm a bot
 	else:
 		recipient_name = recipient # set recipient_name to input name
 	choose_recipient(driver, recipient_name)
+	type_message(driver, message)
 	print("\tSending message to:", recipient_name, "\n")
 	close_chat(driver) # close the chat menu, since you're done sending a message
 	return recipient_name
@@ -278,9 +289,7 @@ def main(argv):
 	take_attendance(driver)
 	who_participates(driver)
 	call_on(driver)
-	# open_chat(driver) # must open chat before sending message
-	send_message(driver)
-	# close_chat(driver)
+	send_message(driver) # opens and closes chat within the func
 	time.sleep(2)
 	# leave_meeting() is broken, but non-essential
 	# leave_meeting(driver)
