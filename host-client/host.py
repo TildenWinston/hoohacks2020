@@ -27,6 +27,7 @@ def prompt():
 	return
 
 # link_builder() - builds web link from og link to skip local app prompt
+# future: add password support (for locked rooms)
 def link_builder(room_link):
 	# replaces /j/ with /wc/join/ to open web client directly
 	web_link = re.sub("/j/", "/wc/join/", room_link)
@@ -35,6 +36,7 @@ def link_builder(room_link):
 # login() - logs into the room
 # reference: https://crossbrowsertesting.com/blog/test-automation/automate-login-with-selenium/
 # reference: https://stackoverflow.com/questions/19035186/how-to-select-element-using-xpath-syntax-on-selenium-for-python
+# future: add password support (for locked rooms)
 def login(driver, room_link):
 	print("\tLogging in...\n")
 	web_link = link_builder(room_link) # convert to web client link
@@ -108,6 +110,27 @@ def call_on(driver):
 			chosen_person, "\n") # print selection
 		return chosen_person # return your "guess" at who was first
 
+# send_message() - have the bot send someone (by default the host) a message
+# random string of numbers for default host string accounts for "funny" students
+# who might name themselves "host." This string is never visible, so they'd have to guess
+# reference: https://stackoverflow.com/questions/12323403/how-do-i-find-an-element-that-contains-specific-text-in-selenium-webdriver-pyth
+def send_message(driver, recipient = "host_69974030947301", message = "I'm a bot, and I'm being tested! Yay!"):
+	recipient_name = "" # temporary storage for recipient name
+	# participants-item__name-label
+	if (recipient == "host_69974030947301"): # if the recipient is default
+		target =  driver.find_element_by_xpath(
+			"//*[contains(text(), '(Host)')]") # find the host's webElement
+			# "//*[text()='(Host)']") # find the host's webElement
+		target = target.find_element_by_xpath("./..") # go to parent element
+		# get other child element of parent; contains host's name
+		target = target.find_element_by_class_name("participants-item__display-name")
+		# get innerHTML of actual host's name
+		recipient_name = target.get_attribute("innerHTML")
+	else:
+		recipient_name = recipient # set recipient_name to input name
+	print("\tSending message to:", recipient_name, "\n")
+	return recipient_name
+
 # take_attendance() - take attendance of who is there at current time
 # I'd have avoided the second list creation, but attendee list was polluted by bot names
 # could add filtering out prof later, but requires searching addditional elements
@@ -137,6 +160,7 @@ def main(argv):
 	take_attendance(driver)
 	who_participates(driver)
 	call_on(driver)
+	send_message(driver)
 	time.sleep(10)
 	print("\tFinished.\n")
 
