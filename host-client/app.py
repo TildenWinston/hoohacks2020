@@ -54,14 +54,18 @@ class Driver(Thread):
             if (count >= attendanceTime):
                 global maxa
                 maxa += 1
-                attendanceList = ##Get Attendance ex: ["Seth", "Max", "Quinn"]
+                # attendanceList = ##Get Attendance ex: ["Seth", "Max", "Quinn"]
+                # save curr students attending to attendanceList
+                attendanceList = take_attendance(webdriver)
                 totalStudents.set(str(len(attendanceList)))
                 room.updateAttendance(attendanceList)
                 updateTable()
                 count = 0
             global maxp
             maxp +=1
-            handsList = ##Get list of students with hands raised ex: ["Seth", "Max"]
+            # handsList = ##Get list of students with hands raised ex: ["Seth", "Max"]
+            # save ppl with hands raised to handsList
+            handsList = who_participates(webdriver)
             raisedHands.set(len(handsList))
             room.updateParticipation(handsList)
             time.sleep(1)
@@ -138,7 +142,14 @@ def main():
     global maxp
     maxp = 0
 
-    #Initialize driver in host.py
+    # get selenium data collector going
+    # set launch options
+    room_link = "https://virginia.zoom.us/j/312504706"
+    headless = False
+    # declare webdriver to store chrome driver
+    global webdriver
+    # launch and store it (with the selected options)
+    webdriver = launch(room_link, headless)
     
     #GUI
     global root
@@ -156,7 +167,7 @@ def main():
     Title1Frame.place(width=200, height=100, x=2, y=0)
     TitleCanvas = tk.Canvas(Title1Frame, highlightbackground=b, bg=b, width = 200, height = 100)      
     TitleCanvas.pack()      
-    img = tk.PhotoImage(file="logo.png")      
+    img = tk.PhotoImage(file="assets/logo.png")      
     TitleCanvas.create_image(1,1, anchor=tk.NW, image=img)
     
     #HandRaisedFrame
@@ -175,7 +186,7 @@ def main():
     inputBox = tk.Entry(InputHRFrame, bg=bgC, width = 10, textvariable = inputVal, fg=fgC, font=("Helvetica", 16))
     inputBox.pack(padx=5, side=tk.LEFT)
     func = lambda: table.insert(0, inputVal.get() + " | hands: " + raisedHands.get())
-    photo = tk.PhotoImage(file = "plus.png") 
+    photo = tk.PhotoImage(file = "assets/plus.png") 
     insertButton = tk.Button(InputHRFrame, highlightbackground="black", height=30, width=30, image=photo, command = func).pack()
 
     global table
@@ -186,7 +197,7 @@ def main():
     #StudentsFrame
     global totalStudents
     totalStudents = tk.StringVar()
-    totalStudents.set(25)
+    totalStudents.set(0) # changed default num of students to 0 (starting value, updates)
     SFrame = tk.Frame(root, bg=bgC)
     SFrame.place(width=200, height=300, x=2, y=310)
     SLabel = tk.Label(SFrame, text="Students", fg=fgC, bg=bgC, font=("Helvetica", 15)).pack(fill=tk.X, pady=10)
@@ -200,7 +211,7 @@ def main():
     timeInputVal = tk.StringVar()
     timeInputBox = tk.Entry(InputSFrame, bg=bgC, width = 10, textvariable = timeInputVal, fg=fgC, font=("Helvetica", 16))
     timeInputBox.pack(padx=5, side=tk.LEFT)
-    setPhoto = tk.PhotoImage(file = "set.png") 
+    setPhoto = tk.PhotoImage(file = "assets/set.png") 
     setButton = tk.Button(InputSFrame, highlightbackground='black', height=30, width=30, image=setPhoto, command = timeFunc).pack()
     global studentTable
     studentTable = tk.Listbox(SFrame, borderwidth=0, fg=fgC, bg=bgC2, font=("Helvetica", 12))

@@ -12,6 +12,13 @@ import urllib.request as urlr
 import time
 import random
 
+# launch() - launch sequence to get driver started, logged in, and prepared to work
+def launch(room_link, headless = True):
+	driver = start_driver(headless) # start the driver and store it (will be returned)
+	login(driver, room_link) # log into the room with the room link
+	open_participants(driver) # open participants panel so data can be collected
+	return driver # return driver so it can be stored and worked on within GUI program
+
 # start_driver() - starts the webdriver and returns it
 # reference: https://browsersize.com/
 # reference: https://stackoverflow.com/questions/23381324/how-can-i-control-chromedriver-open-window-size
@@ -178,6 +185,8 @@ def close_chat(driver):
 	return
 
 # choose_recipient() - selects the chosen recipient from the dropdown
+# reference: https://www.guru99.com/xpath-selenium.html
+# reference: https://stackoverflow.com/questions/29346595/python-selenium-element-is-not-currently-interactable-and-may-not-be-manipulat
 def choose_recipient(driver, recipient_name):
 	print("\tFinding target recipient.\n")
 	# open the dropdown menu
@@ -281,7 +290,7 @@ def main(argv):
 	# print("original link: ", argv[1])
 	# print("\n new link: ", link_builder(argv[1]))
 	# start the webdriver (True = headless mode)
-	driver = start_driver(False)
+	driver = start_driver(True)
 	# run program
 	login(driver, argv[1])
 	open_participants(driver)
@@ -289,7 +298,7 @@ def main(argv):
 	take_attendance(driver)
 	who_participates(driver)
 	call_on(driver)
-	send_message(driver) # opens and closes chat within the func
+	send_message(driver, "Everyone", "I'm ready to rumble, baby!") # opens and closes chat within the func
 	time.sleep(2)
 	# leave_meeting() is broken, but non-essential
 	# leave_meeting(driver)
