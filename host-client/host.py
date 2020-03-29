@@ -70,9 +70,25 @@ def open_participants(driver):
 
 # count_reaction() - counts the number of a chosen reaction at a given time
 def count_reaction(driver, reaction_name = "participants-icon__participants-raisehand"):
+	# find elements of given reaction class (hand raise by default)
 	react_list = driver.find_elements_by_class_name(reaction_name)
 	print("\tNumber of hands raised: " , len(react_list), "\n") # print total
 	return len(react_list) # return number of reactions
+
+# who_participates() - checks who is currently participating (via reactions)
+def who_participates(driver, reaction_name = "participants-icon__participants-raisehand"):
+	participant_list = [] # empty list to hold participants
+	# find elements of given reaction class (hand raise by default)
+	react_list = driver.find_elements_by_class_name(reaction_name)
+	for i in range(len(react_list)): # for each reaction element (belongs to a person)
+		# go to grandparent element, so we can check the name (store in curr element)
+		react_list[i] = react_list[i].find_element_by_xpath("../..")
+		# get the name element (store in curr element)
+		react_list[i] = react_list[i].find_element_by_class_name("participants-item__display-name")
+		# refine to name string (store in curr element)
+		react_list[i] = react_list[i].get_attribute("innerHTML")
+	print("\tPeople raising hands: " , react_list, "\n") # print total
+	return react_list # return list of people reacting
 
 # take_attendance() - take attendance of who is there at current time
 # I'd have avoided the second list creation, but attendee list was polluted by bot names
@@ -85,7 +101,7 @@ def take_attendance(driver):
 		if (attendee_list[i].get_attribute("innerHTML") != "zoom edu bot"): # if not bot
 			# then refine to name and add to the new list
 			new_attendee_list.append(attendee_list[i].get_attribute("innerHTML"))
-	print("\tStudents: ", new_attendee_list)
+	print("\tStudents: ", new_attendee_list, "\n") # print list of attendee names
 	return new_attendee_list # return attendee list
 
 def main(argv):
@@ -101,8 +117,9 @@ def main(argv):
 	open_participants(driver)
 	count_reaction(driver)
 	take_attendance(driver)
+	who_participates(driver)
 	time.sleep(10)
-	print("\n\tFinished.\n")
+	print("\tFinished.\n")
 
 if __name__ == '__main__':
 	main(sys.argv)
