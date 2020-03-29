@@ -10,6 +10,7 @@ import sys
 import re
 import urllib.request as urlr
 import time
+import random
 
 # start_driver() - starts the webdriver and returns it
 def start_driver(headless = True):
@@ -76,6 +77,7 @@ def count_reaction(driver, reaction_name = "participants-icon__participants-rais
 	return len(react_list) # return number of reactions
 
 # who_participates() - checks who is currently participating (via reactions)
+# reference: https://stackoverflow.com/questions/18079765/how-to-find-parent-elements-by-python-webdriver
 def who_participates(driver, reaction_name = "participants-icon__participants-raisehand"):
 	participant_list = [] # empty list to hold participants
 	# find elements of given reaction class (hand raise by default)
@@ -89,6 +91,22 @@ def who_participates(driver, reaction_name = "participants-icon__participants-ra
 		react_list[i] = react_list[i].get_attribute("innerHTML")
 	print("\tPeople raising hands: " , react_list, "\n") # print total
 	return react_list # return list of people reacting
+
+# call_on() - calls on the first person to raise their hand; if it can't tell, randomizes
+def call_on(driver):
+	hand_raiser_list = who_participates(driver) # check who is raising their hand rn
+	if (len(hand_raiser_list) == 0): # if no-one is raising their hand
+		print("\tYou can't call on anyone if no-one is raising their hand!\n")
+		return # return no-one
+	elif (len(hand_raiser_list) == 1): # if one person is raising their hand
+		print("\tThey raised their hand first, so you called on:",
+			hand_raiser_list[0], "\n") # print selection
+		return hand_raiser_list[0] # return the one person raising their hand
+	else: # if more than one person is raising their hand
+		chosen_person = random.choice(hand_raiser_list) # choose someone randomly
+		print("\tYou didn't see who was first, so you guessed and called on:",
+			chosen_person, "\n") # print selection
+		return chosen_person # return your "guess" at who was first
 
 # take_attendance() - take attendance of who is there at current time
 # I'd have avoided the second list creation, but attendee list was polluted by bot names
@@ -118,6 +136,7 @@ def main(argv):
 	count_reaction(driver)
 	take_attendance(driver)
 	who_participates(driver)
+	call_on(driver)
 	time.sleep(10)
 	print("\tFinished.\n")
 
