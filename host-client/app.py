@@ -134,7 +134,8 @@ room = Room()
 def linkFunc():
     # get selenium data collector going
     # set launch options
-    room_link = linkInputVal.get()
+    # room_link = linkInputVal.get()
+    room_link = "https://virginia.zoom.us/j/312504706"
     headless = True
     # declare webdriver to store chrome driver
     global webdriver
@@ -174,7 +175,7 @@ def main():
     global TitleCanvas
     Title1Frame = tk.Frame(root, bg=b)
     Title1Frame.place(width=200, height=100, x=2, y=0)
-    TitleCanvas = tk.Canvas(Title1Frame, highlightbackground=b, bg=b, width = 200, height = 100)      
+    TitleCanvas = tk.Canvas(Title1Frame, highlightbackground=b, bg=b, width = 200, height = 100)
     TitleCanvas.pack()      
     img = tk.PhotoImage(file="assets/logo.png")      
     TitleCanvas.create_image(1,1, anchor=tk.NW, image=img)
@@ -184,7 +185,7 @@ def main():
     LFrame.place(width=200, height=40, x=2, y=110)
     global linkInputVal
     linkInputVal = tk.StringVar()
-    LinkInputBox = tk.Entry(LFrame, bg=bgC, width = 15, textvariable = linkInputVal, fg=fgC, font=("Helvetica", 16))
+    LinkInputBox = tk.Entry(LFrame, bg=bgC, width = 12, textvariable = linkInputVal, fg=fgC, font=("Helvetica", 16))
     LinkInputBox.pack(padx=5, side=tk.LEFT)
     sethPhoto = tk.PhotoImage(file = "assets/set.png") 
     setButton = tk.Button(LFrame, highlightbackground='black', height=30, width=30, image=sethPhoto, command = linkFunc).pack(pady=5)

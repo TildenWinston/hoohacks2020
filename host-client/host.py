@@ -284,6 +284,12 @@ def leave_meeting(driver):
 	print("\tSuccessfully left the meeting. See you next time!\n")
 	return
 
+# call_first() - calls on the first person to raise their hand and notifies them
+def call_first(driver, message = "You're up!"):
+	chosen_person = call_on(driver) # calls on the first person to raise hand and stores
+	send_message(driver, chosen_person, message) # sends the person who was called on the given message
+	return
+
 def main(argv):
 	print("\n\t--- Zoom Education Suite | Host Client ---\n")
 	# testing
