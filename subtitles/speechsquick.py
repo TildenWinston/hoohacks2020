@@ -2,6 +2,7 @@ from __future__ import division
 
 import re
 import sys
+import requests
 
 from google.cloud import speech
 from google.cloud.speech import enums
@@ -9,10 +10,15 @@ from google.cloud.speech import types
 import pyaudio
 from six.moves import queue
 from google.oauth2 import service_account
+from urllib import request, parse
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import logging
+
 
 # Audio recording parameters
 RATE = 16000
 CHUNK = int(RATE / 10)  # 100ms
+SEQ = 11
 
 
 class MicrophoneStream(object):
@@ -33,6 +39,7 @@ class MicrophoneStream(object):
             # https://goo.gl/z757pE
             channels=1, rate=self._rate,
             input=True, frames_per_buffer=self._chunk,
+            input_device_index=0,
             # Run the audio stream asynchronously to fill the buffer object.
             # This is necessary so that the input device's buffer doesn't
             # overflow while the calling thread makes network requests, etc.
@@ -125,6 +132,8 @@ def listen_print_loop(responses):
 
         else:
             print(transcript + overwrite_chars)
+            zoomcaptions(transcript + overwrite_chars)
+
 
             # Exit recognition if any of the transcribed phrases could be
             # one of our keywords.
@@ -135,12 +144,44 @@ def listen_print_loop(responses):
             num_chars_printed = 0
 
 
+def micinfo():
+    p = pyaudio.PyAudio()
+    info = p.get_host_api_info_by_index(0)
+    numdevices = info.get('deviceCount')
+    for i in range(0, numdevices):
+        if (p.get_device_info_by_host_api_device_index(0, i).get('maxInputChannels')) > 0:
+            print("Input Device id ", i, " - ", p.get_device_info_by_host_api_device_index(0, i).get('name'))
+
+
+def zoomcaptions(caption):
+    global SEQ
+    seq = SEQ
+    lang = "en-us"
+    url = "https://wmcc.zoom.us/closedcaption?id=312504706&ns=VGlsZGVuIFdpbnN0b24ncyBab29tIE1lZXRpbmc&expire=86400&sparams=id%2Cns%2Cexpire&signature=Fbr0lAD-_l4F4lI6j_4xZd9R9KL3UeZwTAOmmO_UMgU.EwEAAAFxKHfD6QABUYAYbFd0bTZhRTc0dG8wVTQxOVJJSHZOdz09OGdJRXN0MU56UytjZDlmL2dCK2JpS3FjSEJISmpqcll6K2RtZDM3cUljWGg4RkpiNkxuNkVFZz09"
+    text = url + '&seq=' + str(seq) + '&lang=' + lang
+    print(text)
+    print(seq)
+
+    requests.post(text, data=caption)
+
+    SEQ = SEQ + 1
+
+    # data = parse.urlencode({'text' : "TestTestTest"}).encode()
+    # req =  request.Request(url, data=data) # this will make the method "POST"
+    # resp = request.urlopen(req)
+    print("past the post attempt")
+
+
+
 def main():
     # See http://g.co/cloud/speech/docs/languages
     # for a list of supported languages.
     language_code = 'en-US'  # a BCP-47 language tag
 
-    credentials = service_account.Credentials.from_service_account_file("C:\\Users\\tilde\\Downloads\\HooHacks2020-bdcc1fb08115.json")
+    micinfo()
+    zoomcaptions('Captions Starting')
+
+    credentials = service_account.Credentials.from_service_account_file("HooHacks2020-bdcc1fb08115.json")
     client = speech.SpeechClient(credentials=credentials)
     config = types.RecognitionConfig(
         encoding=enums.RecognitionConfig.AudioEncoding.LINEAR16,
