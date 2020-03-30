@@ -53,26 +53,25 @@ class Driver(Thread):
     def run(self):
         count = 0
         while(True):
-            if (driverStartFlag):
-                if (count >= attendanceTime):
-                    global maxa
-                    maxa += 1
-                    # attendanceList = ##Get Attendance ex: ["Seth", "Max", "Quinn"]
-                    # save curr students attending to attendanceList
-                    attendanceList = take_attendance(webdriver)
-                    totalStudents.set(str(len(attendanceList)))
-                    room.updateAttendance(attendanceList)
-                    updateTable()
-                    count = 0
-                global maxp
-                maxp +=1
-                # handsList = ##Get list of students with hands raised ex: ["Seth", "Max"]
-                # save ppl with hands raised to handsList
-                handsList = who_participates(webdriver)
-                raisedHands.set(len(handsList))
-                room.updateParticipation(handsList)
-                time.sleep(1)
-                count += 1
+            if (count >= attendanceTime):
+                global maxa
+                maxa += 1
+                # attendanceList = ##Get Attendance ex: ["Seth", "Max", "Quinn"]
+                # save curr students attending to attendanceList
+                attendanceList = take_attendance(webdriver)
+                totalStudents.set(str(len(attendanceList)))
+                room.updateAttendance(attendanceList)
+                updateTable()
+                count = 0
+            global maxp
+            maxp +=1
+            # handsList = ##Get list of students with hands raised ex: ["Seth", "Max"]
+            # save ppl with hands raised to handsList
+            handsList = who_participates(webdriver)
+            raisedHands.set(len(handsList))
+            room.updateParticipation(handsList)
+            time.sleep(1)
+            count += 1
             
 
 def updateTable():
@@ -162,6 +161,8 @@ def main():
     global maxp
     maxp = 0
     
+    linkFunc() # added 
+
     #GUI
     global root
     root = tk.Tk()
