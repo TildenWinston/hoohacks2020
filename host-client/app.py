@@ -149,7 +149,7 @@ def timeFunc():
     print(attendanceTime)
 
 def firstHandFunc():
-    ##Send message to first person
+    call_first(webdriver)
     print("message sent")
 
 def setCCFunc():
