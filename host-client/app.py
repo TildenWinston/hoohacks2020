@@ -45,6 +45,7 @@ class ColorAnimation(Thread):
                 g = max(g - 1, 250)
                 b = max(b - 1, 153)
                 time.sleep(0.005)
+                
 
 class Driver(Thread):
     def run(self):
@@ -69,6 +70,7 @@ class Driver(Thread):
             room.updateParticipation(handsList)
             time.sleep(1)
             count += 1
+            
 
 def updateTable():
     studentTable.delete(0, tk.END)
@@ -141,6 +143,10 @@ def timeFunc():
     attendanceTime = int(timeInputVal.get())
     print(attendanceTime)
 
+def firstHandFunc():
+    ##Send message to first person
+    print("message sent")
+
 def setCCFunc():
     #Spot for Tilden
     print("not implemented")
@@ -171,19 +177,24 @@ def main():
 
     #LinkFrame
     LFrame = tk.Frame(root, bg=bgC)
-    LFrame.place(width=200, height=40, x=2, y=100)
+    LFrame.place(width=200, height=40, x=2, y=110)
     global linkInputVal
     linkInputVal = tk.StringVar()
-    LinkInputBox = tk.Entry(LFrame, bg=bgC, textvariable = linkInputVal, fg=fgC, font=("Helvetica", 16))
-    phoneInputBox.pack(fill=tk.X, padx=10)
-    CCButton = tk.Button(LFrame, text="Join Zoom", font=("Helvetica", 16), command = linkFunc).pack(pady=5)
+    LinkInputBox = tk.Entry(LFrame, bg=bgC, width = 15, textvariable = linkInputVal, fg=fgC, font=("Helvetica", 16))
+    LinkInputBox.pack(padx=5, side=tk.LEFT)
+    sethPhoto = tk.PhotoImage(file = "assets/set.png") 
+    setButton = tk.Button(LFrame, highlightbackground='black', height=30, width=30, image=sethPhoto, command = linkFunc).pack(pady=5)
 
+    #FirstHandFrame
+    FHFrame = tk.Frame(root, bg=bgC)
+    FHFrame.place(width=200, height=40, x=2, y=150)
+    FirstHandButton = tk.Button(FHFrame, text="First Hand", font=("Helvetica", 16), command = firstHandFunc).pack(fill=tk.X)
     
     #HandRaisedFrame
     global raisedHands
     raisedHands = tk.StringVar()
     HRFrame = tk.Frame(root, bg=bgC)
-    HRFrame.place(width=200, height=200, x=2, y=150)
+    HRFrame.place(width=200, height=205, x=2, y=185)
     raisedHands.set(10)
     HRLabel = tk.Label(HRFrame, text="Number of Raised Hands", fg=fgC, bg=bgC, font=("Helvetica", 13)).pack(fill=tk.X, pady=10)
     HRLabelVal = tk.Label(HRFrame, textvariable=raisedHands, fg=fgC, bg=bgC, font=("Helvetica", 30)).pack(fill=tk.X)
@@ -207,7 +218,7 @@ def main():
     totalStudents = tk.StringVar()
     totalStudents.set(0) # changed default num of students to 0 (starting value, updates)
     SFrame = tk.Frame(root, bg=bgC)
-    SFrame.place(width=200, height=270, x=2, y=360)
+    SFrame.place(width=200, height=220, x=2, y=400)
     SLabel = tk.Label(SFrame, text="Students", fg=fgC, bg=bgC, font=("Helvetica", 15)).pack(fill=tk.X, pady=10)
     SLabelVal = tk.Label(SFrame, textvariable=totalStudents, fg=fgC, bg=bgC, font=("Helvetica", 30)).pack(fill=tk.X)
     SALabel = tk.Label(SFrame, text="Set Attendance Interval:", fg=fgC, bg=bgC, font=("Helvetica", 10)).pack(fill=tk.X, pady=5)
@@ -227,7 +238,7 @@ def main():
 
     #CCFrame
     CCFrame = tk.Frame(root, bg=bgC)
-    CCFrame.place(width=200, height=170, x=2, y=640)
+    CCFrame.place(width=200, height=170, x=2, y=630)
     CCLabel = tk.Label(CCFrame, text="Closed Captioning", fg=fgC, bg=bgC, font=("Helvetica", 15)).pack(fill=tk.X, pady=2)
     CC1Label = tk.Label(CCFrame, text="Set Link:", fg=fgC, bg=bgC, font=("Helvetica", 10)).pack(fill=tk.X, pady=2)
     linkInputVal = tk.StringVar()
