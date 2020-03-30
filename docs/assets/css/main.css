@@ -2,14 +2,14 @@ html {
 	/* logo old borderless */
 	/*background: #797979;*/
 	/* logo bright */
-	background: #cd0000;
+	background: #abf5db;
 }
 body {
 }
 .content {
 	position: absolute;
 	left: 50%;
-	top: 40%;
+	top: 30%;
 	-webkit-transform: translate(-50%, -50%);
 	transform: translate(-50%, -50%);
 }
@@ -34,12 +34,12 @@ a.button {
 	-moz-appearance: button;
 	appearance: button;*/
 	padding: 5px;
-	background: #ffd900;
+	background: #7fdbbb;
 	border-radius: 2px;
 	text-decoration: none;
-	color: #cd0000;
+	color: black;
 }
 a.button:hover {
-	background: #cd3500;
-	color: #ffd900;
+	background: #51a688;
+	color: black;
 }
