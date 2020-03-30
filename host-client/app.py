@@ -13,6 +13,8 @@ b = "#09fa9a"
 
 attendanceTime = 10
 
+driverStartFlag = False
+
 def fromRgb(rgb):
     return "#%02x%02x%02x" % rgb  
 
@@ -49,27 +51,28 @@ class ColorAnimation(Thread):
 
 class Driver(Thread):
     def run(self):
-        count = 0
-        while(True):
-            if (count >= attendanceTime):
-                global maxa
-                maxa += 1
-                # attendanceList = ##Get Attendance ex: ["Seth", "Max", "Quinn"]
-                # save curr students attending to attendanceList
-                attendanceList = take_attendance(webdriver)
-                totalStudents.set(str(len(attendanceList)))
-                room.updateAttendance(attendanceList)
-                updateTable()
-                count = 0
-            global maxp
-            maxp +=1
-            # handsList = ##Get list of students with hands raised ex: ["Seth", "Max"]
-            # save ppl with hands raised to handsList
-            handsList = who_participates(webdriver)
-            raisedHands.set(len(handsList))
-            room.updateParticipation(handsList)
-            time.sleep(1)
-            count += 1
+        if (driverStartFlag):
+            count = 0
+            while(True):
+                if (count >= attendanceTime):
+                    global maxa
+                    maxa += 1
+                    # attendanceList = ##Get Attendance ex: ["Seth", "Max", "Quinn"]
+                    # save curr students attending to attendanceList
+                    attendanceList = take_attendance(webdriver)
+                    totalStudents.set(str(len(attendanceList)))
+                    room.updateAttendance(attendanceList)
+                    updateTable()
+                    count = 0
+                global maxp
+                maxp +=1
+                # handsList = ##Get list of students with hands raised ex: ["Seth", "Max"]
+                # save ppl with hands raised to handsList
+                handsList = who_participates(webdriver)
+                raisedHands.set(len(handsList))
+                room.updateParticipation(handsList)
+                time.sleep(1)
+                count += 1
             
 
 def updateTable():
@@ -137,6 +140,7 @@ def linkFunc():
     global webdriver
     # launch and store it (with the selected options)
     webdriver = launch(room_link, headless)
+    driverStartFlag = True
 
 def timeFunc():
     global attendanceTime
