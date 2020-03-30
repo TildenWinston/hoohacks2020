@@ -1,6 +1,6 @@
 
 html {
-	background: #ffffff;
+	background: #e6ffff;
 }
 body {
     
@@ -20,10 +20,21 @@ body {
 	margin: auto;
 }
 h1 {
-	color: #ffffff;
+	color: #0000A0;
 	font-size: 400%;
 	margin-bottom: 0px;
 }
+
+img{
+       border-radius: 8 px;
+       display:block;
+       margin-left: auto;
+       margin-right:auto;
+       height: 500px;
+       width: 35%;
+}
+
+
 p.desc {
 	color: #ffffff;
 	margin-top: -3px;
@@ -42,5 +53,5 @@ a.button {
 }
 a.button:hover {
 	background: #e6ffff;
-	color: #e6ffff; 
+	color: #black; 
 }

@@ -1,10 +1,16 @@
 html {
-	background: #ffffff;
+	background: #e6ffff;
 }
 body {
 	font-family: 'Lato', sans-serif;
 	text-align: center;
 }
+p {
+        font-size: 110%;  
+        font-weight: italic;
+
+}
+
 .content {
 	position: absolute;
 	left: 50%;
@@ -51,7 +57,7 @@ a.button {
 }
 a.button:hover {
 	background: #e6ffff;
-	color: #e6ffff;
+	color: #black;
 }
 .page-title {
 	top: 0;
