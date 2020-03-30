@@ -1,5 +1,5 @@
 html {
-	background: #cd0000;
+	background: #abf5db;
 }
 body {
 	font-family: 'Lato', sans-serif;
@@ -20,7 +20,7 @@ body {
 	border-radius: 7px;
 	padding: 20px;
 	border-width: 2px;
-	border-color: #ffd900;
+	border-color: #51a688;
 	border-style: solid;
 }
 h1 {
@@ -29,7 +29,7 @@ h1 {
 	margin-bottom: 0px;
 }
 .release-title {
-	color: #ffd900;
+	color: #51a688;
 	font-size: 200%;
 	margin-bottom: 0px;
 	margin-top: 0px;
@@ -44,14 +44,14 @@ a.button {
 	-moz-appearance: button;
 	appearance: button;*/
 	padding: 5px;
-	background: #ffd900;
+	background: #51a688;
 	border-radius: 2px;
 	text-decoration: none;
-	color: #cd0000;
+	color: black;
 }
 a.button:hover {
-	background: #cd3500;
-	color: #ffd900;
+	background: #7fdbbb;
+	color: black;
 }
 .page-title {
 	top: 0;
@@ -61,5 +61,5 @@ a.button:hover {
 }
 h1 {
 	margin-top: 15px;
-	color: #ffd900;
+	color: #51a688;
 }
