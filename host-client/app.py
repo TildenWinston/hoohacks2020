@@ -47,7 +47,6 @@ class ColorAnimation(Thread):
                 time.sleep(0.005)
 
 class Driver(Thread):
-
     def run(self):
         count = 0
         while(True):
@@ -127,6 +126,16 @@ class Room():
 
 room = Room()
 
+def linkFunc():
+    # get selenium data collector going
+    # set launch options
+    room_link = linkInputVal.get()
+    headless = True
+    # declare webdriver to store chrome driver
+    global webdriver
+    # launch and store it (with the selected options)
+    webdriver = launch(room_link, headless)
+
 def timeFunc():
     global attendanceTime
     attendanceTime = int(timeInputVal.get())
@@ -141,15 +150,6 @@ def main():
     maxa= 0
     global maxp
     maxp = 0
-
-    # get selenium data collector going
-    # set launch options
-    room_link = "https://virginia.zoom.us/j/312504706"
-    headless = True
-    # declare webdriver to store chrome driver
-    global webdriver
-    # launch and store it (with the selected options)
-    webdriver = launch(room_link, headless)
     
     #GUI
     global root
@@ -160,7 +160,6 @@ def main():
     canvas = tk.Canvas(root, highlightbackground=b, height=1000, width=200, bg=b)
     canvas.pack()
 
-    
     #Title1Frame
     global TitleCanvas
     Title1Frame = tk.Frame(root, bg=b)
@@ -169,14 +168,24 @@ def main():
     TitleCanvas.pack()      
     img = tk.PhotoImage(file="assets/logo.png")      
     TitleCanvas.create_image(1,1, anchor=tk.NW, image=img)
+
+    #LinkFrame
+    LFrame = tk.Frame(root, bg=bgC)
+    LFrame.place(width=200, height=40, x=2, y=100)
+    global linkInputVal
+    linkInputVal = tk.StringVar()
+    LinkInputBox = tk.Entry(LFrame, bg=bgC, textvariable = linkInputVal, fg=fgC, font=("Helvetica", 16))
+    phoneInputBox.pack(fill=tk.X, padx=10)
+    CCButton = tk.Button(LFrame, text="Join Zoom", font=("Helvetica", 16), command = linkFunc).pack(pady=5)
+
     
     #HandRaisedFrame
     global raisedHands
     raisedHands = tk.StringVar()
     HRFrame = tk.Frame(root, bg=bgC)
-    HRFrame.place(width=200, height=200, x=2, y=100)
+    HRFrame.place(width=200, height=200, x=2, y=150)
     raisedHands.set(10)
-    HRLabel = tk.Label(HRFrame, text="Number of Raised Hands", fg=fgC, bg=bgC, font=("Helvetica", 15)).pack(fill=tk.X, pady=10)
+    HRLabel = tk.Label(HRFrame, text="Number of Raised Hands", fg=fgC, bg=bgC, font=("Helvetica", 13)).pack(fill=tk.X, pady=10)
     HRLabelVal = tk.Label(HRFrame, textvariable=raisedHands, fg=fgC, bg=bgC, font=("Helvetica", 30)).pack(fill=tk.X)
     HRLogLabel = tk.Label(HRFrame, text="Log number:", fg=fgC, bg=bgC, font=("Helvetica", 10)).pack(fill=tk.X, pady=5)
     InputHRFrame = tk.Frame(HRFrame, bg=bgC)
@@ -193,13 +202,12 @@ def main():
     table = tk.Listbox(HRFrame, borderwidth=0, fg=fgC, bg=bgC2, font=("Helvetica", 12))
     table.pack(fill=tk.X, padx=10, pady=10)
 
-
     #StudentsFrame
     global totalStudents
     totalStudents = tk.StringVar()
     totalStudents.set(0) # changed default num of students to 0 (starting value, updates)
     SFrame = tk.Frame(root, bg=bgC)
-    SFrame.place(width=200, height=300, x=2, y=310)
+    SFrame.place(width=200, height=270, x=2, y=360)
     SLabel = tk.Label(SFrame, text="Students", fg=fgC, bg=bgC, font=("Helvetica", 15)).pack(fill=tk.X, pady=10)
     SLabelVal = tk.Label(SFrame, textvariable=totalStudents, fg=fgC, bg=bgC, font=("Helvetica", 30)).pack(fill=tk.X)
     SALabel = tk.Label(SFrame, text="Set Attendance Interval:", fg=fgC, bg=bgC, font=("Helvetica", 10)).pack(fill=tk.X, pady=5)
@@ -214,12 +222,12 @@ def main():
     setPhoto = tk.PhotoImage(file = "assets/set.png") 
     setButton = tk.Button(InputSFrame, highlightbackground='black', height=30, width=30, image=setPhoto, command = timeFunc).pack()
     global studentTable
-    studentTable = tk.Listbox(SFrame, borderwidth=0, fg=fgC, bg=bgC2, font=("Helvetica", 12))
+    studentTable = tk.Listbox(SFrame, borderwidth=0, fg=fgC, bg=bgC2, font=("Helvetica", 10))
     studentTable.pack(fill=tk.X, padx=10, pady=10)
 
     #CCFrame
     CCFrame = tk.Frame(root, bg=bgC)
-    CCFrame.place(width=200, height=170, x=2, y=620)
+    CCFrame.place(width=200, height=170, x=2, y=640)
     CCLabel = tk.Label(CCFrame, text="Closed Captioning", fg=fgC, bg=bgC, font=("Helvetica", 15)).pack(fill=tk.X, pady=2)
     CC1Label = tk.Label(CCFrame, text="Set Link:", fg=fgC, bg=bgC, font=("Helvetica", 10)).pack(fill=tk.X, pady=2)
     linkInputVal = tk.StringVar()
@@ -237,7 +245,6 @@ def main():
 
     t2 = ColorAnimation()
     t2.start()
-
 
     root.mainloop()
 
