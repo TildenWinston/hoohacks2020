@@ -51,9 +51,9 @@ class ColorAnimation(Thread):
 
 class Driver(Thread):
     def run(self):
-        if (driverStartFlag):
-            count = 0
-            while(True):
+        count = 0
+        while(True):
+            if (driverStartFlag):
                 if (count >= attendanceTime):
                     global maxa
                     maxa += 1
